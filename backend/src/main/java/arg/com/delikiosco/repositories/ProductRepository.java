@@ -9,7 +9,8 @@ import org.springframework.stereotype.Repository;
 
 
 /**
- * Interfaz para Product que extiende de JpaRepository para heredar las querys de JPA.
+ * Interfaz para Product que extiende de JpaRepository para heredar las querys de JPA y crear
+ * querys personalizadas.
  */
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {

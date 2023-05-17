@@ -9,14 +9,17 @@ import org.springframework.stereotype.Repository;
 
 
 /**
- * Interfaz para Provider que extiende de JpaRepository para heredar las querys de JPA.
+ * Interfaz para Provider que extiende de JpaRepository para heredar las querys de JPA y para crear
+ * querys personalizadas.
  */
 @Repository
 public interface ProviderRepository extends JpaRepository<Provider, Long> {
 
   Optional<Provider> findByCuit(Long cuit);
 
-  @Query(value = "select pr from Provider pr where pr.active = true")
+  @Query(value =
+      "select pr from Provider pr join fetch "
+          + "pr.products p where pr.active = true and p.active = true")
   Set<Provider> findActives();
 
 }

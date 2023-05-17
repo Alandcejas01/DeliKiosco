@@ -74,7 +74,7 @@ public class ProviderService implements ProviderServiceInterface {
   public MessageDto updateProvider(Long providerId, Provider.ProviderInfoDto providerDto) {
     Provider existingProvider = providerRepository.findById(providerId)
         .orElseThrow(() -> new GeneralException("El proveedor no existe",
-            HttpStatus.BAD_REQUEST));
+            HttpStatus.NOT_FOUND));
 
     Optional<Provider> provider = providerRepository
         .findByCuit(providerDto.getCuit());
@@ -94,10 +94,11 @@ public class ProviderService implements ProviderServiceInterface {
   public MessageDto toggleActiveProvider(Long productId) {
     Provider provider = providerRepository.findById(productId)
         .orElseThrow(() -> new GeneralException("No existe el proveedor",
-            HttpStatus.BAD_REQUEST));
+            HttpStatus.NOT_FOUND));
     provider.setActive(!provider.getActive());
     providerRepository.save(provider);
-    return new MessageDto("Proveedor activado/desactivado con éxito.");
+    String status = (provider.getActive()) ? "Activado" : "Desactivado";
+    return new MessageDto("Proveedor " + status + " con éxito.");
   }
 
 }

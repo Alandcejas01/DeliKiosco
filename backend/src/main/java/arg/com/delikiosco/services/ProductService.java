@@ -54,7 +54,7 @@ public class ProductService implements ProductServiceInterface {
   public MessageDto createProduct(Long providerId, Product.ProductRequest productDto) {
     Provider provider = providerRepository.findById(providerId)
         .orElseThrow(() -> new GeneralException("El proveedor no existe",
-            HttpStatus.BAD_REQUEST));
+            HttpStatus.NOT_FOUND));
     if (productRepository.findByName(productDto.getName()).isPresent()) {
       throw new GeneralException("El nombre del producto ya existe",
           HttpStatus.BAD_REQUEST);
@@ -69,7 +69,7 @@ public class ProductService implements ProductServiceInterface {
   public MessageDto updateProduct(Long productId, Product.ProductRequest productDto) {
     Product existingProduct = productRepository.findById(productId)
         .orElseThrow(() -> new GeneralException("El producto no existe",
-            HttpStatus.BAD_REQUEST));
+            HttpStatus.NOT_FOUND));
 
     Optional<Product> product = productRepository
         .findByName(productDto.getName());
@@ -89,10 +89,11 @@ public class ProductService implements ProductServiceInterface {
   public MessageDto toggleActiveProduct(Long productId) {
     Product product = productRepository.findById(productId)
         .orElseThrow(() -> new GeneralException("No existe el producto",
-            HttpStatus.BAD_REQUEST));
+            HttpStatus.NOT_FOUND));
     product.setActive(!product.getActive());
     productRepository.save(product);
-    return new MessageDto("Producto activado/desactivado con éxito.");
+    String status = (product.getActive()) ? "Activado" : "Desactivado";
+    return new MessageDto("Producto " + status + " con éxito.");
   }
 
   @Override

@@ -82,6 +82,21 @@ public class Provider {
     private String address;
   }
 
+  /**
+   * Dto con la información necesaria del proveedor para las ventas.
+   */
+  @Getter
+  @Setter
+  @AllArgsConstructor
+  @NoArgsConstructor
+  public static class ProviderSaleDto  {
+    private Long id;
+    private String name;
+    private Long cuit;
+    private String phone;
+    private String address;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
