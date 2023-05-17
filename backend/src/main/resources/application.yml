@@ -8,3 +8,12 @@ spring:
     hibernate.ddl-auto: create-drop
     generate-ddl: true
     show-sql: true
+  mvc:
+    throw-exception-if-no-handler-found: true
+
+  external:
+    service:
+      base-url: "https://6463935f127ad0b8f88ba6ee.mockapi.io/carpinchoStore"
+  web:
+    resources:
+      add-mappings: false
