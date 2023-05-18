@@ -1,9 +1,9 @@
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: ${dbLocal_url}
-    username: ${dbLocal_user}
-    password: ${dbLocal_password}
+    url: ${db_url}
+    username: ${db_user}
+    password: ${db_password}
   jpa:
     hibernate.ddl-auto: create-drop
     generate-ddl: true
@@ -13,7 +13,7 @@ spring:
 
   external:
     service:
-      base-url: "https://6463935f127ad0b8f88ba6ee.mockapi.io/carpinchoStore"
+      base-url: ${mockApi_url}
   web:
     resources:
       add-mappings: false
