@@ -4,6 +4,7 @@ import arg.com.delikiosco.entities.User;
 import arg.com.delikiosco.services.UserService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,11 +24,13 @@ public class UserController {
 
   @GetMapping("/{userEmail}")
   public ResponseEntity<Optional<User>> user(@PathVariable String userEmail) {
-    return ResponseEntity.ok(userService.findByEmail(userEmail));
+    Optional<User> response = userService.findByEmail(userEmail);
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @GetMapping("/find/{userId}")
   public ResponseEntity<User.UserDto> findById(@PathVariable Long userId) {
-    return ResponseEntity.ok(userService.findById(userId));
+    User.UserDto response = userService.findById(userId);
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 }

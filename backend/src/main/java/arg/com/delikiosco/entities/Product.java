@@ -84,7 +84,22 @@ public class Product {
   }
 
   /**
-   * Dto para las ventas.
+   * Dto para traer los datos de los productos en las ventas.
+   */
+  @Getter
+  @Setter
+  @AllArgsConstructor
+  @NoArgsConstructor
+  public static class ProductSaleResponse {
+    private Long id;
+    private Long providerId;
+    private String name;
+    private String description;
+    private BigDecimal price;
+  }
+
+  /**
+   * Dto para las creaciones de ventas.
    */
   @Getter
   @Setter

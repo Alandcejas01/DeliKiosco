@@ -6,6 +6,7 @@ import arg.com.delikiosco.dtos.auth.RegisterRequestDto;
 import arg.com.delikiosco.services.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,16 +25,16 @@ public class AuthenticationController {
 
   @PostMapping("/register")
   public ResponseEntity<AuthenticationResponseDto> register(
-      @Valid @RequestBody RegisterRequestDto request
-  ) {
-    return ResponseEntity.ok(authenticationService.register(request));
+      @Valid @RequestBody RegisterRequestDto request) {
+    AuthenticationResponseDto response = authenticationService.register(request);
+    return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 
   @PostMapping("/login")
   public ResponseEntity<AuthenticationResponseDto> authenticate(
-      @Valid @RequestBody AuthenticationRequestDto request
-  ) {
-    return ResponseEntity.ok(authenticationService.authenticate(request));
+      @Valid @RequestBody AuthenticationRequestDto request) {
+    AuthenticationResponseDto response = authenticationService.authenticate(request);
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
 }

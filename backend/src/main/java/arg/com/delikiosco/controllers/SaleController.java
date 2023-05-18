@@ -6,6 +6,7 @@ import arg.com.delikiosco.services.SaleService;
 import jakarta.validation.Valid;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,22 +27,26 @@ public class SaleController {
 
   @GetMapping
   public ResponseEntity<Set<Sale.SaleDto>> getSales() {
-    return ResponseEntity.ok(saleService.getSales());
+    Set<Sale.SaleDto> response = saleService.getSales();
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @PostMapping("/makeSale/{clientId}")
   public ResponseEntity<MessageDto> makeSale(
       @Valid @RequestBody Sale.SaleRequest saleDto, @PathVariable Long clientId) {
-    return ResponseEntity.ok(saleService.makeSale(clientId, saleDto));
+    MessageDto response = saleService.makeSale(clientId, saleDto);
+    return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 
   @GetMapping("/{date}")
   public ResponseEntity<Set<Sale.SaleDto>> getSalesByDate(@PathVariable String date) {
-    return ResponseEntity.ok(saleService.getSalesByDate(date));
+    Set<Sale.SaleDto> response = saleService.getSalesByDate(date);
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @GetMapping("/provider/{cuitProvider}")
   public ResponseEntity<Set<Sale.SaleDto>> getSalesByProvider(@PathVariable Long cuitProvider) {
-    return ResponseEntity.ok(saleService.getSalesByProvider(cuitProvider));
+    Set<Sale.SaleDto> response = saleService.getSalesByProvider(cuitProvider);
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 }

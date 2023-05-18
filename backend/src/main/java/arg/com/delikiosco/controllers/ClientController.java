@@ -7,6 +7,7 @@ import arg.com.delikiosco.services.ClientService;
 import jakarta.validation.Valid;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,33 +30,39 @@ public class ClientController {
 
   @GetMapping
   public ResponseEntity<Set<Client.ClientDto>> getClientsActive() {
-    return ResponseEntity.ok(clientService.getClientsActive());
+    Set<Client.ClientDto> response = clientService.getClientsActive();
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @GetMapping("/all")
   public ResponseEntity<Set<Client.ClientDto>> getAllClients() {
-    return ResponseEntity.ok(clientService.getAllClients());
+    Set<Client.ClientDto> response = clientService.getAllClients();
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @PostMapping("/create")
   public ResponseEntity<MessageDto> createProvider(
           @Valid @RequestBody Client.ClientRequest clientDto) {
-    return ResponseEntity.ok(clientService.createClient(clientDto));
+    MessageDto response = clientService.createClient(clientDto);
+    return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 
   @PutMapping("/update/{clientId}")
   public ResponseEntity<MessageDto> updateProvider(@PathVariable Long clientId,
       @Valid @RequestBody Client.ClientRequest clientDto) {
-    return ResponseEntity.ok(clientService.updateClient(clientId, clientDto));
+    MessageDto response = clientService.updateClient(clientId, clientDto);
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @DeleteMapping("/toggleActive/{clientId}")
   public ResponseEntity<MessageDto> toggleActiveProvider(@PathVariable Long clientId) {
-    return ResponseEntity.ok(clientService.toggleActiveClient(clientId));
+    MessageDto response = clientService.toggleActiveClient(clientId);
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @GetMapping("/buys")
   public ResponseEntity<Set<Sale.SaleDto>> getBuys() {
-    return ResponseEntity.ok(clientService.getBuys());
+    Set<Sale.SaleDto> response = clientService.getBuys();
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 }

@@ -59,7 +59,7 @@ public class Sale {
   )
   private Set<Product> products = new HashSet<>();
 
-  private Integer amounts;
+  private Integer amountsTotal;
 
   private BigDecimal totalPrice;
 
@@ -88,7 +88,7 @@ public class Sale {
     private LocalDateTime date;
     private Client.ClientSaleDto client;
     private Set<Provider.ProviderSaleDto> providers = new HashSet<>();
-    private Set<Product.ProductSaleDto> products = new HashSet<>();
+    private Set<Product.ProductSaleResponse> products = new HashSet<>();
     private Integer amounts;
     private BigDecimal totalPrice;
   }

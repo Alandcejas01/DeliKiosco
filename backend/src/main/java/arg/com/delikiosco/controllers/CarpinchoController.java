@@ -29,7 +29,8 @@ public class CarpinchoController {
 
   @GetMapping
   public ResponseEntity<Set<ProductCarpinchoDto.TransformedProductDto>> getProducts() {
-    return ResponseEntity.ok(carpinchoService.getProducts());
+    Set<ProductCarpinchoDto.TransformedProductDto> response = carpinchoService.getProducts();
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @PostMapping("/create")

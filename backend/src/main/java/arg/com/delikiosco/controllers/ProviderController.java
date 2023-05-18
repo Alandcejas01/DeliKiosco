@@ -6,6 +6,7 @@ import arg.com.delikiosco.services.ProviderService;
 import jakarta.validation.Valid;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,28 +30,33 @@ public class ProviderController {
 
   @GetMapping
   public ResponseEntity<Set<Provider.ProviderDto>> getProvidersActive() {
-    return ResponseEntity.ok(providerService.getProvidersActive());
+    Set<Provider.ProviderDto> response = providerService.getProvidersActive();
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @GetMapping("/all")
   public ResponseEntity<Set<Provider.ProviderDto>> getAllProviders() {
-    return ResponseEntity.ok(providerService.getAllProviders());
+    Set<Provider.ProviderDto> response = providerService.getAllProviders();
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @PostMapping("/create")
   public ResponseEntity<MessageDto> createProvider(
           @Valid @RequestBody Provider.ProviderDto providerDto) {
-    return ResponseEntity.ok(providerService.createProvider(providerDto));
+    MessageDto response = providerService.createProvider(providerDto);
+    return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 
   @PutMapping("/update/{providerId}")
   public ResponseEntity<MessageDto> updateProvider(@PathVariable Long providerId,
       @Valid @RequestBody Provider.ProviderInfoDto providerDto) {
-    return ResponseEntity.ok(providerService.updateProvider(providerId, providerDto));
+    MessageDto response = providerService.updateProvider(providerId, providerDto);
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @DeleteMapping("/toggleActive/{providerId}")
   public ResponseEntity<MessageDto> toggleActiveProvider(@PathVariable Long providerId) {
-    return ResponseEntity.ok(providerService.toggleActiveProvider(providerId));
+    MessageDto response = providerService.toggleActiveProvider(providerId);
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 }

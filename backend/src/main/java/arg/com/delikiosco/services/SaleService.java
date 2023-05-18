@@ -93,7 +93,7 @@ public class SaleService implements SaleServiceInterface {
         .client(client)
         .providers(providers)
         .products(products)
-        .amounts(amounts)
+        .amountsTotal(amounts)
         .totalPrice(totalPrice)
         .build();
     saleRepository.save(sale);
