@@ -1,6 +1,8 @@
 package arg.com.delikiosco.entities;
 
+import arg.com.delikiosco.dtos.SalePrAmount;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -11,9 +13,11 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -59,6 +63,9 @@ public class Sale {
   )
   private Set<Product> products = new HashSet<>();
 
+  @ElementCollection
+  private List<SalePrAmount> amounts;
+
   private Integer amountsTotal;
 
   private BigDecimal totalPrice;
@@ -71,6 +78,8 @@ public class Sale {
   @AllArgsConstructor
   @NoArgsConstructor
   public static class SaleRequest {
+    @NotNull(message = "El id del cliente es requerido.")
+    private Long clientId;
     @NotEmpty(message = "Los productos son requeridos")
     private Set<Product.ProductSaleDto> products;
   }
@@ -89,7 +98,8 @@ public class Sale {
     private Client.ClientSaleDto client;
     private Set<Provider.ProviderSaleDto> providers = new HashSet<>();
     private Set<Product.ProductSaleResponse> products = new HashSet<>();
-    private Integer amounts;
+    private List<SalePrAmount> amounts;
+    private Integer amountsTotal;
     private BigDecimal totalPrice;
   }
 
@@ -106,7 +116,7 @@ public class Sale {
     private LocalDateTime date;
     private Client.ClientDto client;
     private Set<Product.ProductSaleDto> products = new HashSet<>();
-    private Integer amounts;
+    private Integer amountsTotal;
     private BigDecimal totalPrice;
   }
 
@@ -121,6 +131,7 @@ public class Sale {
     private Long id;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;
+    private Integer amountsTotal;
     private BigDecimal totalPrice;
   }
 }

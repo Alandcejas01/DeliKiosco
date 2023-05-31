@@ -31,10 +31,10 @@ public class SaleController {
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
-  @PostMapping("/makeSale/{clientId}")
+  @PostMapping("/makeSale")
   public ResponseEntity<MessageDto> makeSale(
-      @Valid @RequestBody Sale.SaleRequest saleDto, @PathVariable Long clientId) {
-    MessageDto response = saleService.makeSale(clientId, saleDto);
+      @Valid @RequestBody Sale.SaleRequest saleDto) {
+    MessageDto response = saleService.makeSale(saleDto);
     return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 

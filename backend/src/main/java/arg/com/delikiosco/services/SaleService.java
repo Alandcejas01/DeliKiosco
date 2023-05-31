@@ -1,6 +1,7 @@
 package arg.com.delikiosco.services;
 
 import arg.com.delikiosco.dtos.MessageDto;
+import arg.com.delikiosco.dtos.SalePrAmount;
 import arg.com.delikiosco.entities.Client;
 import arg.com.delikiosco.entities.Product;
 import arg.com.delikiosco.entities.Provider;
@@ -12,8 +13,10 @@ import arg.com.delikiosco.repositories.SaleRepository;
 import arg.com.delikiosco.services.interfaces.SaleServiceInterface;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -50,8 +53,8 @@ public class SaleService implements SaleServiceInterface {
 
   @Override
   @Transactional
-  public MessageDto makeSale(Long clientId, Sale.SaleRequest saleDto) {
-    Client client = clientRepository.findById(clientId)
+  public MessageDto makeSale(Sale.SaleRequest saleDto) {
+    Client client = clientRepository.findById(saleDto.getClientId())
         .orElseThrow(() -> new GeneralException("El cliente no existe",
             HttpStatus.NOT_FOUND));
     if (!client.getActive()) {
@@ -60,6 +63,7 @@ public class SaleService implements SaleServiceInterface {
     }
     Set<Provider> providers = new HashSet<>();
     Set<Product> products = new HashSet<>();
+    List<SalePrAmount> prAmounts = new ArrayList<>();
     int amounts = 0;
     BigDecimal totalPrice = new BigDecimal("0.0");
     for (Product.ProductSaleDto productSale : saleDto.getProducts()) {
@@ -81,6 +85,11 @@ public class SaleService implements SaleServiceInterface {
       }
       int newStock = product.getStock() - productSale.getAmount();
       product.setStock(newStock);
+      SalePrAmount salePrAmount = SalePrAmount.builder()
+          .productId(product.getId())
+          .amount(productSale.getAmount())
+          .build();
+      prAmounts.add(salePrAmount);
       amounts += productSale.getAmount();
       totalPrice = totalPrice.add(productSale.getPrice()
           .multiply(new BigDecimal(productSale.getAmount())));
@@ -88,11 +97,15 @@ public class SaleService implements SaleServiceInterface {
       products.add(product);
       productRepository.save(product);
     }
+    prAmounts = prAmounts.stream()
+        .sorted(Comparator.comparingLong(SalePrAmount::getProductId)).collect(Collectors.toList());
+
     Sale sale = Sale.builder()
         .date(LocalDateTime.now())
         .client(client)
         .providers(providers)
         .products(products)
+        .amounts(prAmounts)
         .amountsTotal(amounts)
         .totalPrice(totalPrice)
         .build();
@@ -108,10 +121,11 @@ public class SaleService implements SaleServiceInterface {
       throw new GeneralException("La fecha introducida es invalida",
           HttpStatus.BAD_REQUEST);
     }
-    LocalDateTime saleDateStartOfDay = LocalDateTime.parse(
-        date + " 00:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-    LocalDateTime saleDateEndOfDay = LocalDateTime.parse(
-        date + " 23:59:59", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+    LocalDate localDate = LocalDate.parse(date);
+    LocalDateTime saleDateStartOfDay = localDate.atStartOfDay();
+    LocalDateTime saleDateEndOfDay = localDate.atTime(LocalTime.MAX);
+
     Set<Sale> sales = saleRepository.getByDate(saleDateStartOfDay, saleDateEndOfDay);
     return sales.stream()
         .map(sale -> mapper.map(sale, Sale.SaleDto.class))

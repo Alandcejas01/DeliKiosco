@@ -11,7 +11,7 @@ public interface SaleServiceInterface {
 
   Set<Sale.SaleDto> getSales();
 
-  MessageDto makeSale(Long clientId, Sale.SaleRequest saleDto);
+  MessageDto makeSale(Sale.SaleRequest saleDto);
 
   Set<Sale.SaleDto> getSalesByDate(String date);
 
