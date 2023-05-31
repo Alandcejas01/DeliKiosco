@@ -71,7 +71,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       response.getWriter().write(new JSONObject()
               .put("message", "Token Expirado.")
               .toString());
-    } catch (JwtException | IllegalArgumentException e) {
+    } catch (JwtException e) {
       response.setContentType("application/json;charset=UTF-8");
       response.setStatus(HttpServletResponse.SC_FORBIDDEN);
       response.getWriter().write(new JSONObject()
